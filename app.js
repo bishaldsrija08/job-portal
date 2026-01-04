@@ -1,6 +1,9 @@
 const express = require('express');
 const app = express();
 
+// parse json data
+app.use(express.json())
+
 // Dotenv configuration
 require('dotenv').config();
 
@@ -8,6 +11,9 @@ require('dotenv').config();
 const { connectDB } = require('./database/dbConfig');
 connectDB()
 
+// Routes
+const userRoutes = require("./routes/userRoutes")
+app.use("/", userRoutes)
 
 
 
