@@ -15,7 +15,8 @@ connectDB()
 const userRoutes = require("./routes/userRoutes")
 app.use("/", userRoutes)
 
-
+const jobRoute = require("./routes/jobRoutes")
+app.use("/", jobRoute)
 
 
 
