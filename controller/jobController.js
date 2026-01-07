@@ -4,7 +4,7 @@ const { Job, User } = require("../model")
 
 const createJob = async (req, res) => {
     const { jobTitle, jobDescription, jobLocation, jobSalary, jobCompany } = req.body
-    const userId = "4c996861-1b86-4990-92fa-bcd93134a54d"
+    const userId = "146d08a3-0b4d-4aac-b1f4-a7827bbd4f61"
     if (!jobTitle || !jobDescription || !jobLocation || !jobSalary || !jobCompany) {
         return res.status(400).json({ message: "All fields are required" })
     }
