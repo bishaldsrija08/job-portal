@@ -12,11 +12,17 @@ const { connectDB } = require('./database/dbConfig');
 connectDB()
 
 // Routes
+// Auth routes
 const userRoutes = require("./routes/userRoutes")
 app.use("/", userRoutes)
 
+//  Job routes
 const jobRoute = require("./routes/jobRoutes")
 app.use("/", jobRoute)
+
+// Application routes
+const applicationRoutes = require("./routes/applicationRoutes")
+app.use("/", applicationRoutes)
 
 
 

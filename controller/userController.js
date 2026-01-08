@@ -53,14 +53,14 @@ const loginUser = async (req, res) => {
 
     // Check password
     const isPasswordValid = bcrypt.compareSync(userPassword, isExistingUser.userPassword)
-    if(!isPasswordValid){
+    if (!isPasswordValid) {
         return res.status(400).json({
             message: "Invalid credentials"
         })
     }
 
     // Generate JWT Token
-    const token = jwt.sign({id: isExistingUser.id}, "hello@#", {
+    const token = jwt.sign({ id: isExistingUser.id }, process.env.JWT_SECRET, {
         expiresIn: '30d'
     })
 

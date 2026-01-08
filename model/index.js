@@ -1,3 +1,4 @@
+const Application = require("./ApplicationMode");
 const Job = require("./JobModel");
 const User = require("./UserModel");
 
@@ -5,5 +6,12 @@ const User = require("./UserModel");
 User.hasMany(Job, { foreignKey: 'userId'});
 Job.belongsTo(User, { foreignKey: 'userId'});
 
+// Relationships between User and Application
+User.hasMany(Application, {foreignKey: "userId"})
+Application.belongsTo(User, {foreignKey: "userId"})
 
-module.exports = {User, Job}
+// Relationships between Job and Application
+Job.hasMany(Application, {foreignKey: "jobId"})
+Application.belongsTo(Job, {foreignKey: "jobId"})
+
+module.exports = {User, Job, Application}
