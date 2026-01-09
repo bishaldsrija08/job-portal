@@ -5,7 +5,7 @@ import nodemailer from 'nodemailer';
 
 
 const sendEmail = async (data) => {
-    nodemailer.createTransport({
+    const transporter =nodemailer.createTransport({
         service: "gmail",
         auth: {
             user: process.env.EMAIL_USER,
@@ -14,12 +14,11 @@ const sendEmail = async (data) => {
     })
 
     const mailOptions = {
-        from: process.env.EMAIL_USER,
+        from: `Job Portal <${process.env.EMAIL_USER}>`,
         to: data.to,
         subject: data.subject,
         text: data.text
     }
-
     await transporter.sendMail(mailOptions);
 }
 

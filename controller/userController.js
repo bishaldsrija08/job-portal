@@ -24,7 +24,7 @@ const registerUser = async (req, res) => {
     }
 
     // Create user
-    User.create({
+    await User.create({
         username,
         userEmail,
         userPassword: bcrypt.hashSync(userPassword, 10) // hashing password
@@ -101,7 +101,7 @@ const forgotPassword = async (req, res) => {
         subject: "Password Reset OTP",
         text: `Your OTP for password reset is ${otp}. It is valid for 2 minutes.`
     }
-
+    console.log("Error")
     // Send mail
     await sendEmail(sendEmailData)
 
@@ -109,10 +109,99 @@ const forgotPassword = async (req, res) => {
     isExistingUser.otp = otp;
     isExistingUser.otpGeneratedTime = Date.now().toString();
     await isExistingUser.save();
+
+    return res.status(200).json({
+        message: "OTP sent to your email"
+    })
 }
 
+const checkOtp = async (req, res) => {
+    const { userEmail, otp } = req.body;
+
+    if (!userEmail || !otp) {
+        return res.status(400).json({
+            message: "All fields are required"
+        })
+    }
+
+    // Check if user exists
+    const isExistingUser = await User.findOne({
+        where: { userEmail, otp }
+    })
+
+    if (!isExistingUser || isExistingUser.otp !== otp) {
+        return res.status(400).json({
+            message: "No user found or invalid OTP"
+        })
+    }
+
+    // Check if otp is expired
+    const currentTime = Date.now();
+    const otpGeneratedTime = parseInt(isExistingUser.otpGeneratedTime);
+    const diff = (currentTime - otpGeneratedTime) / 1000 // in seconds
+    if (diff > 120) {
+        isExistingUser.otp = null;
+        isExistingUser.otpGeneratedTime = null;
+        await isExistingUser.save();
+        return res.status(400).json({
+            message: "OTP expired"
+        })
+    }
+
+    // Otp is valid
+    isExistingUser.otp = null;
+    isExistingUser.otpGeneratedTime = null;
+    await isExistingUser.save();
+
+    return res.status(200).json({
+        message: "OTP verified successfully"
+    })
+}
+
+// password reset
+
+const resetPassword = async (req, res) => {
+    const { userEmail, newPassword, confirmPassword } = req.body;
+    console.log(req.body)
+    if (!userEmail || !newPassword || !confirmPassword) {
+        return res.status(400).json({
+            message: "All fields are required"
+        })
+    }
+
+    //check if passwords match
+    if (newPassword !== confirmPassword) {
+        return res.status(400).json({
+            message: "Passwords do not match"
+        })
+    }
+
+    // Check if user exists
+    const isExistingUser = await User.findOne({
+        where: {userEmail}
+    })
+
+    if(!isExistingUser){
+        return res.status(400).json({
+            message: "User does not exist"
+        })
+    }
+
+    // Update password
+    isExistingUser.userPassword = bcrypt.hashSync(newPassword, 10)
+
+    await isExistingUser.save();
+
+    return res.status(200).json({
+        message: "Password reset successfully"
+    })
+}
+
+// exporting all controller functions
 module.exports = {
     registerUser,
     loginUser,
-    forgotPassword
+    forgotPassword,
+    checkOtp,
+    resetPassword
 }
