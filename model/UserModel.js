@@ -23,6 +23,14 @@ const User = sequelize.define("User", {
         type: DataTypes.ENUM("jobSeeker", "jobProvider"),
         allowNull: false,
         defaultValue: "jobSeeker"
+    },
+    otp: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    otpGeneratedTime:{
+        type: DataTypes.STRING,
+        allowNull: true
     }
 })
 
