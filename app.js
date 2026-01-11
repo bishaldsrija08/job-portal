@@ -24,6 +24,12 @@ app.use("/", jobRoute)
 const applicationRoutes = require("./routes/applicationRoutes")
 app.use("/", applicationRoutes)
 
+// User Profile routes
+const userProfileRoutes = require("./routes/userProfileRoutes")
+app.use("/", userProfileRoutes)
+
+// Static folder for uploads
+app.use("/uploads/", express.static("uploads"))
 
 
 

@@ -1,10 +1,10 @@
-const {DataTypes}= require('sequelize');
+const { DataTypes } = require('sequelize');
 const { sequelize } = require('../database/dbConfig');
 
 const User = sequelize.define("User", {
     id: {
         type: DataTypes.UUID,
-        primaryKey:true,
+        primaryKey: true,
         defaultValue: DataTypes.UUIDV4
     },
     username: {
@@ -14,12 +14,12 @@ const User = sequelize.define("User", {
     userEmail: {
         type: DataTypes.STRING,
         allowNull: false
-    }, 
+    },
     userPassword: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    userRole:{
+    userRole: {
         type: DataTypes.ENUM("jobSeeker", "jobProvider"),
         allowNull: false,
         defaultValue: "jobSeeker"
@@ -28,7 +28,11 @@ const User = sequelize.define("User", {
         type: DataTypes.STRING,
         allowNull: true
     },
-    otpGeneratedTime:{
+    otpGeneratedTime: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    userProfilePic: {
         type: DataTypes.STRING,
         allowNull: true
     }

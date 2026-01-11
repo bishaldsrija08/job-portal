@@ -8,6 +8,21 @@ const { default: sendEmail } = require("../services/sendEmail");
 const registerUser = async (req, res) => {
     // taking data from req body
     const { username, userEmail, userPassword } = req.body
+
+    // Restrict to register as jobProvider
+    if (req.body.userRole && req.body.userRole === "jobProvider") {
+        return res.status(400).json({
+            message: "Registration as jobProvider is not allowed"
+        })
+    }
+
+    let fileName;
+    if (req.file) {
+        fileName = req.file.filename
+    } else {
+        fileName = "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740&q=80"
+    }
+
     if (!username || !userEmail || !userPassword) {
         return res.status(400).json({
             message: "All fields are required"
@@ -27,7 +42,8 @@ const registerUser = async (req, res) => {
     await User.create({
         username,
         userEmail,
-        userPassword: bcrypt.hashSync(userPassword, 10) // hashing password
+        userPassword: bcrypt.hashSync(userPassword, 10), // hashing password
+        userProfilePic: "http://localhost:4000/uploads/" + fileName
     })
     return res.status(201).json({
         message: "User registered successfully"
@@ -178,10 +194,10 @@ const resetPassword = async (req, res) => {
 
     // Check if user exists
     const isExistingUser = await User.findOne({
-        where: {userEmail}
+        where: { userEmail }
     })
 
-    if(!isExistingUser){
+    if (!isExistingUser) {
         return res.status(400).json({
             message: "User does not exist"
         })
