@@ -15,7 +15,7 @@ const registerUser = async (req, res) => {
             message: "Registration as jobProvider is not allowed"
         })
     }
-
+    
     let fileName;
     if (req.file) {
         fileName = req.file.filename

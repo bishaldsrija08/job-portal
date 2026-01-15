@@ -38,5 +38,6 @@ app.use("/uploads/", express.static("uploads"))
 // Start the server
 const port = process.env.PORT
 app.listen(port, () => {
+    require('./adminSeed')();
     console.log(`Server is running on port ${port}.`);
 })
