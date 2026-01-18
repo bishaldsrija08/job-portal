@@ -70,7 +70,7 @@ const getApplicationsForJob = async (req, res) => {
 // Get single application by id
 // can get by jobSeeker and jobProvider
 
-const getJobApplicationById = async (req, res) => {
+const getMyApplication = async (req, res) => {
     const { id } = req.params
     const application = await Application.findByPk(id, {
         include: [
@@ -143,4 +143,4 @@ const deleteApplicationById = async (req, res)=>{
     })
 }
 
-module.exports = { applyForJob, getApplicationsForJob, getJobApplicationById, updateApplicationStatus, deleteApplicationById }
+module.exports = { applyForJob, getApplicationsForJob, getMyApplication, updateApplicationStatus, deleteApplicationById }
