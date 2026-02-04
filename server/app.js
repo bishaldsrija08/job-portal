@@ -11,6 +11,14 @@ require('dotenv').config();
 const { connectDB } = require('./database/dbConfig');
 connectDB()
 
+// CORS configuration
+const cors = require('cors');
+app.use(cors(
+    {
+        origin: "http://localhost:5173"
+    }
+))
+
 // Routes
 // Auth routes
 const userRoutes = require("./routes/userRoutes")
