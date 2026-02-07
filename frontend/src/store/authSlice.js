@@ -3,7 +3,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { apiClient } from "../api"
 
-const status = {
+export const status = {
     IDLE: "idle",
     LOADING: "loading",
     ERROR: "error"
@@ -26,6 +26,8 @@ const authSlice = createSlice({
         },
         setData(state, action) {
             state.data = action.payload
+            localStorage.setItem("user", JSON.stringify(action.payload));
+
         },
         setStatus(state, action) {
             state.status = action.payload
@@ -36,6 +38,12 @@ const authSlice = createSlice({
         setError(state, action) {
             state.error = action.payload
         },
+        logoutUser(state) {
+            state.isAuthenticated = false;
+            state.data = [];
+            state.token = "";
+            localStorage.removeItem("token");
+        }
 
     }
 })
@@ -85,13 +93,13 @@ export function loginUser(userData) {
         try {
             const response = await apiClient.post("login", userData)
             if (response.status === 201) {
-                const token = response.data.token
+                const token = response.data.data
                 localStorage.setItem("token", token)
                 dispatch(setToken(token))
                 dispatch(setAuthenticated(true))
                 dispatch(setStatus(status.IDLE))
 
-            }else{
+            } else {
                 dispatch(setError("Login failed"))
                 dispatch(setStatus(status.ERROR))
             }

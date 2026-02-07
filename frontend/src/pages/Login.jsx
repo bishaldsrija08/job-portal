@@ -1,7 +1,10 @@
 import { useState } from "react"
+import { useDispatch } from "react-redux"
 import { Link } from "react-router-dom"
+import { loginUser } from "../store/authSlice"
 
 const Login = () => {
+    const dispatch = useDispatch()
     const [formData, setFormData] = useState({
         userEmail: "",
         userPassword: ""
@@ -14,14 +17,20 @@ const Login = () => {
             [name]: value
         })
     }
-    console.log(formData.userEmail)
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        dispatch(loginUser(formData))
+        console.log("Form Data Submitted: ", formData)
+        alert("Login functionality is under development.")
+    }
+
     return (
         <>
             <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8 flex flex-col mx-auto mt-20">
                 <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
                     Login to Your Account
                 </h2>
-                <form className="space-y-5">
+                <form className="space-y-5" onSubmit={handleSubmit}>
                     {/* Email */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">

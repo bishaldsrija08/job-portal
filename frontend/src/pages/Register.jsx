@@ -1,9 +1,12 @@
 import { useState } from "react"
 import { useDispatch } from "react-redux"
 import { Link } from "react-router-dom"
-import { registerUser } from "../store/authSlice"
+import { registerUser, status } from "../store/authSlice"
+import { useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 
 const Register = () => {
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const [formData, setFormData] = useState({
         username: "",
@@ -23,6 +26,11 @@ const Register = () => {
         dispatch(registerUser(formData))
         console.log("Form Data Submitted: ", formData)
         alert("Registration functionality is under development.")
+    }
+    const authState = useSelector((state) => state.auth)
+    // navigate to login page on successful registration
+    if (authState.status === status.IDLE && authState.error === null) {
+        navigate("/login")
     }
     return (
         <>
