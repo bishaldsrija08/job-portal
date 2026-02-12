@@ -39,14 +39,15 @@ const registerUser = async (req, res) => {
     }
 
     // Create user
-    await User.create({
+    const userData =await User.create({
         username,
         userEmail,
         userPassword: bcrypt.hashSync(userPassword, 10), // hashing password
         userProfilePic: "http://localhost:4000/uploads/" + fileName
     })
     return res.status(201).json({
-        message: "User registered successfully"
+        message: "User registered successfully",
+        data: userData
     })
 }
 
@@ -166,6 +167,7 @@ const checkOtp = async (req, res) => {
 
     // Otp is valid
     isExistingUser.otp = null;
+    isExistingUser.isOtpVerified = true;
     isExistingUser.otpGeneratedTime = null;
     await isExistingUser.save();
 
@@ -204,8 +206,13 @@ const resetPassword = async (req, res) => {
     }
 
     // Update password
+    if (!isExistingUser.isOtpVerified) {
+        return res.status(400).json({
+            message: "OTP verification is required for password reset"
+        })
+    }
     isExistingUser.userPassword = bcrypt.hashSync(newPassword, 10)
-
+    isExistingUser.isOtpVerified = false;
     await isExistingUser.save();
 
     return res.status(200).json({

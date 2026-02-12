@@ -6,7 +6,7 @@ const createJob = async (req, res) => {
     if (!jobTitle || !jobDescription || !jobLocation || !jobSalary || !jobCompany) {
         return res.status(400).json({ message: "All fields are required" })
     }
-    await Job.create({
+    const userData = await Job.create({
         jobTitle,
         jobDescription,
         jobLocation,
@@ -15,7 +15,7 @@ const createJob = async (req, res) => {
         userId
     })
     res.status(201).json({
-        message: "job created successfully",
+        message: "job created successfully"
     })
 }
 // get all jobs

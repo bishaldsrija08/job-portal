@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { Link } from "react-router-dom"
 import { registerUser, status } from "../store/authSlice"
@@ -20,6 +20,7 @@ const Register = () => {
             ...formData,
             [name]: value
         })
+        console.log(value)
     }
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -32,6 +33,7 @@ const Register = () => {
     if (authState.status === status.IDLE && authState.error === null) {
         navigate("/login")
     }
+
     return (
         <>
             <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8 flex flex-col mx-auto mt-20">

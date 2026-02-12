@@ -1,11 +1,14 @@
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
+import { logoutUser } from "./store/authSlice"
 
 const Nabvar = () => {
   const dispatch = useDispatch()
-  const isAuthenticated = useSelector((state) => state.auth)
+  const { isAuthenticated } = useSelector((state) => state.auth)
 
-
+  const handleLogOut = () => {
+    dispatch(logoutUser)
+  }
 
   return (
     <>
@@ -19,18 +22,17 @@ const Nabvar = () => {
 
           {/* Right Buttons */}
           <div className="flex gap-4">
-            {!isAuthenticated && <div className="flex gap-4"><button className="bg-blue-600 text-white px-4 py-2 rounded">
+            {isAuthenticated ? (
+              <button onClick={handleLogOut} className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+                Logout
+              </button> ) : (<div className="flex gap-4"><Link to="/login" className="bg-blue-600 text-white px-4 py-2 rounded">
               Login
-            </button>
-              <button className="bg-blue-600 text-white px-4 py-2 rounded">
+            </Link>
+              <Link to="/register" className="bg-blue-600 text-white px-4 py-2 rounded">
                 Register
-              </button>
+              </Link>
             </div>
-            }
-
-            {isAuthenticated && <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
-              Logout
-            </button>}
+            )}
           </div>
 
         </div>

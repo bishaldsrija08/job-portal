@@ -43,12 +43,13 @@ const authSlice = createSlice({
             state.data = [];
             state.token = "";
             localStorage.removeItem("token");
+            localStorage.removeItem("user");
         }
 
     }
 })
 
-export const { setAuthenticated, setData, setStatus, setToken, setError } = authSlice.actions
+export const { setAuthenticated, setData, setStatus, setToken, setError, logoutUser } = authSlice.actions
 export default authSlice.reducer
 
 // Thunks here
@@ -67,7 +68,7 @@ export function registerUser(userData) {
             const response = await apiClient.post("register", userData)
             if (response.status === 201) {
                 dispatch(setStatus(status.IDLE))
-                dispatch(setData(response.data))
+                dispatch(setData(response.data.data))
                 console.log("Success")
             } else {
                 dispatch(setError("Registration failed"))
@@ -92,8 +93,9 @@ export function loginUser(userData) {
         }
         try {
             const response = await apiClient.post("login", userData)
-            if (response.status === 201) {
+            if (response.status === 200) {
                 const token = response.data.data
+                console.log(token)
                 localStorage.setItem("token", token)
                 dispatch(setToken(token))
                 dispatch(setAuthenticated(true))

@@ -22,7 +22,7 @@ const connectDB = async () => {
     }
 
     // Sync models => Migrations
-    await sequelize.sync({alter: false }).then(() => {
+    await sequelize.sync({alter: true }).then(() => {
         console.log("All models were synchronized successfully.")
     })
 }
